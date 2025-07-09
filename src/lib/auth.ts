@@ -5,7 +5,7 @@ const mockUsers: User[] = [
   {
     id: "1",
     name: "Admin User",
-    email: "admin@school.edu",
+    email: "admin@school.com",
     avatar: "/placeholder.svg",
     lastLogin: new Date().toISOString(),
   },

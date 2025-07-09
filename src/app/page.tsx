@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { isAuthenticated, user, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -12,7 +12,9 @@ export default function Home() {
       console.log("Not authenticated, redirecting to login");
       router.push("/login");
       return;
+    } else {
+      router.push("teachers");
     }
-  }, [isAuthenticated, user, isLoading, router]);
-  return <div>Dashboard</div>;
+  }, []);
+  return <div>Reload the page</div>;
 }

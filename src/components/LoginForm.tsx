@@ -116,7 +116,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@school.edu"
+                placeholder="admin@school.com"
                 value={credentials.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
@@ -213,7 +213,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           </div>
           <div className="mt-2 space-y-1 text-xs text-gray-500 bg-gray-50 p-3 rounded-lg">
             <div>
-              <strong>Email:</strong> admin@school.edu
+              <strong>Email:</strong> admin@school.com
             </div>
             <div>
               <strong>Password:</strong> password123
