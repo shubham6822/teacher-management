@@ -8,9 +8,28 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/components/AuthProvider";
 import { logoutUser } from "@/lib/auth";
-import { Users, Menu, X, LogOut } from "lucide-react";
+import {
+  Users,
+  Menu,
+  X,
+  LogOut,
+  LayoutDashboard,
+  Calendar,
+  FileText,
+  ClipboardCheck,
+  TrendingUp,
+  Settings,
+} from "lucide-react";
 
-const navigation = [{ name: "Teachers", href: "/teachers", icon: Users }];
+const navigation = [
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Teachers", href: "/teachers", icon: Users },
+  { name: "Timetable", href: "/timetable", icon: Calendar },
+  { name: "Leave Requests", href: "/leave-requests", icon: FileText },
+  { name: "Attendance", href: "/attendance", icon: ClipboardCheck },
+  { name: "Performance", href: "/performance", icon: TrendingUp },
+  { name: "Settings", href: "/settings", icon: Settings },
+];
 
 export function SidebarNavigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

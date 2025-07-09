@@ -12,8 +12,6 @@ export default function Home() {
       console.log("Not authenticated, redirecting to login");
       router.push("/login");
       return;
-    } else {
-      router.push("teachers");
     }
   }, []);
   return <div>Reload the page</div>;
