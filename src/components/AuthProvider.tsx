@@ -3,8 +3,9 @@
 import type React from "react";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import type { User, AuthState } from "@/types/auth";
-import { getCurrentUser, clearUserData } from "@/lib/auth";
+import { getCurrentUser, clearUserData, isAuthenticated } from "@/lib/auth";
 
 interface AuthContextType extends AuthState {
   login: (user: User) => void;
@@ -14,6 +15,8 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     isAuthenticated: false,
@@ -25,11 +28,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuth = () => {
       try {
         const user = getCurrentUser();
+        const authenticated = isAuthenticated();
+
         setAuthState({
           user,
-          isAuthenticated: !!user,
+          isAuthenticated: authenticated,
           isLoading: false,
         });
+
+        // Redirect logic
+        if (!authenticated && pathname !== "/login") {
+          console.log("No valid token found, redirecting to login");
+          router.push("/login");
+        } else if (authenticated && pathname === "/login") {
+          console.log("User is authenticated, redirecting to dashboard");
+          router.push("/dashboard");
+        }
       } catch (error) {
         console.error("Auth check error:", error);
         setAuthState({
@@ -37,11 +51,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           isAuthenticated: false,
           isLoading: false,
         });
+        if (pathname !== "/login") {
+          router.push("/login");
+        }
       }
     };
 
     checkAuth();
-  }, []);
+  }, [pathname, router]);
 
   const login = (user: User) => {
     setAuthState({
@@ -58,6 +75,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isAuthenticated: false,
       isLoading: false,
     });
+    // Redirect to login after logout
+    router.push("/login");
   };
 
   return (

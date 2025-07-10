@@ -54,14 +54,27 @@ export async function logoutUser(): Promise<void> {
 export function getCurrentUser(): User | null {
   if (typeof window === "undefined") return null;
 
+  // First validate the token
+  if (!validateAuthToken()) {
+    console.log("Token validation failed, clearing user data");
+    clearUserData();
+    return null;
+  }
+
   try {
-    const userData =
-      localStorage.getItem("user-data") || sessionStorage.getItem("user-data");
-    const user = userData ? JSON.parse(userData) : null;
+    const userData = localStorage.getItem("user-data");
+
+    if (!userData) {
+      console.log("No user data found");
+      return null;
+    }
+
+    const user = JSON.parse(userData);
     console.log("Retrieved user from storage:", user);
     return user;
   } catch (error) {
     console.error("Error retrieving user data:", error);
+    clearUserData();
     return null;
   }
 }
@@ -72,14 +85,20 @@ export function storeUserData(user: User, rememberMe = false): void {
 
   console.log("Storing user data:", user, "Remember me:", rememberMe);
 
-  const storage = rememberMe ? localStorage : sessionStorage;
-  storage.setItem("user-data", JSON.stringify(user));
-  storage.setItem("auth-token", "mock-jwt-token");
+  // Always use localStorage for consistency
+  localStorage.setItem("user-data", JSON.stringify(user));
+  localStorage.setItem("auth-token", "mock-jwt-token");
 
-  // Clear the other storage to avoid conflicts
-  const otherStorage = rememberMe ? sessionStorage : localStorage;
-  otherStorage.removeItem("user-data");
-  otherStorage.removeItem("auth-token");
+  // Clear session storage to avoid conflicts
+  sessionStorage.removeItem("user-data");
+  sessionStorage.removeItem("auth-token");
+}
+
+// Check if user is authenticated
+export function isAuthenticated(): boolean {
+  if (typeof window === "undefined") return false;
+
+  return validateAuthToken();
 }
 
 // Clear user data
@@ -91,4 +110,35 @@ export function clearUserData(): void {
   localStorage.removeItem("auth-token");
   sessionStorage.removeItem("user-data");
   sessionStorage.removeItem("auth-token");
+}
+
+// Validate auth token
+export function validateAuthToken(): boolean {
+  if (typeof window === "undefined") return false;
+
+  const token = localStorage.getItem("auth-token");
+  const userData = localStorage.getItem("user-data");
+
+  if (!token || !userData) {
+    console.log("No token or user data found");
+    return false;
+  }
+
+  try {
+    // Parse user data to ensure it's valid JSON
+    JSON.parse(userData);
+
+    // In a real app, you would decode and validate the JWT token here
+    // For now, we'll just check if the token exists and is not empty
+    if (token === "mock-jwt-token") {
+      console.log("Token validation successful");
+      return true;
+    }
+
+    console.log("Invalid token format");
+    return false;
+  } catch (error) {
+    console.error("Token validation error:", error);
+    return false;
+  }
 }

@@ -53,7 +53,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
         // Small delay to ensure state is updated
         setTimeout(() => {
-          router.push("/");
+          router.push("/dashboard");
           router.refresh();
         }, 100);
       } else {
