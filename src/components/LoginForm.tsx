@@ -28,8 +28,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   const router = useRouter();
   const { login } = useAuth();
   const [credentials, setCredentials] = useState<LoginCredentials>({
-    email: "",
-    password: "",
+    email: "admin@school.com",
+    password: "password123",
     rememberMe: false,
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -53,7 +53,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
         // Small delay to ensure state is updated
         setTimeout(() => {
-          router.push("/dashboard");
+          router.push("/");
           router.refresh();
         }, 100);
       } else {

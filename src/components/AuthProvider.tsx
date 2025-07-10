@@ -41,8 +41,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log("No valid token found, redirecting to login");
           router.push("/login");
         } else if (authenticated && pathname === "/login") {
-          console.log("User is authenticated, redirecting to dashboard");
-          router.push("/dashboard");
+          console.log("User is authenticated, redirecting to home");
+          router.push("/");
         }
       } catch (error) {
         console.error("Auth check error:", error);
